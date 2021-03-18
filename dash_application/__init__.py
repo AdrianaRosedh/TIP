@@ -5,69 +5,70 @@ import plotly.express as px
 import plotly.graph_objs as go
 import pandas as pd
 import requests
+import json
+from dash.dependencies import Input, Output
 
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
-
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
+#GET KPI1
+KPI1 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi1/incvol/"
+r = requests.get(KPI1)
+KPI1JSON = json.loads(r.text)
 
 def create_dash_application(flask_app):
-    dash_app = dash.Dash(server=flask_app, name="Dashboard", url_base_pathname='/dash/')
+    dash_app = dash.Dash(server=flask_app, name="Dashboard", url_base_pathname='/kpi1/')
     
-    dash_app.layout = html.Div(
-        dcc.Graph(
-            id='example-graph',
-            figure=px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
-        ),  
-        
+    dash_app.layout= html.Div(children=[
+    html.H1(children='IBERIA DASHBOARD'),
+    #KPI1
+    dcc.Dropdown(
+        id="month",
+        options=[{"label": 'January 2018', "value":'201801'},
+                 {"label": 'February 2018', "value":'201802'},
+                 {"label": 'March 2018', "value":'201803'},
+                 ],
+        value="201801"
+    ),
+    dcc.Graph(
+        id='kpi1',
+        figure={
+            'data': [],
+            'layout': {
+                'title': ''
+            }
+        }
     )
+])
+    #KPI1 DATA - total incidences
+    incidences= {}
+    for i in KPI1JSON["items"]:
+        if i['month'] in incidences:
+            incidences[i['month']].append(i['incidences_number'])
+        else: 
+            incidences[i['month']]= [i["incidences_number"]]
+    
+    @dash_app.callback(
+    Output(component_id="kpi1",component_property="figure"),
+    [Input(component_id="month", component_property="value")]
+    )
+    def update_KPI1(value):
+        return {
+            "data": [
+            {'x': ["Alta", "Baja", "Media", "Critica"], 'y': incidences[value], 'type': 'bar', 'name': value},
+      ],
+      "layout": {
+        "title": "Incidences per month"
+      }
+    } 
 
     return dash_app
 
-# KPI 1 Information
-
-k1_endpoint = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi1/incvol/"
 
 
-k1_r = requests.get(k1_endpoint)
-k1_kpi_data = k1_r.json()["items"]
 
 
-k1_months = []
-k1_incidences_numbers = []
-k1_priorities = []
 
-for dict in k1_kpi_data:
-    k1_months.append(dict["month"])
-    k1_incidences_numbers.append(dict["incidences_number"])
-    k1_priorities.append(dict["priority"])
 
-#print(k1_months)
-#print(k1_incidences_numbers)
-#print(k1_priorities)
 
-k1_df = pd.DataFrame({
-    "Months": k1_months,
-    "Number of incidents": k1_incidences_numbers,
-    "Priority": k1_priorities
-})
 
-def create_kpi1(flask_app):
-    dash_app1 = dash.Dash(server=flask_app, name="kpi1", url_base_pathname='/kpi1/')
-    
-    dash_app1.layout = html.Div(
-        dcc.Graph(
-            id='kpi1-graph',
-            figure= px.bar(k1_df, x="Months", y="Number of incidents", color="Priority", barmode="group")
-        ),  
-        
-    )
-
-    return dash_app1
 
 if __name__ == '__main__':
     app.run_server(debug=True)

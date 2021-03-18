@@ -4273,7 +4273,15 @@ tbody.collapse.show {
 }
 
 .nav-item {
-  padding-bottom: 3rem;
+  padding-bottom: 1.5rem;
+}
+
+.active a{
+  background-color: #ffffff !important;
+  color: #CC3134!important;
+}
+.active a, .material-icons{
+  color: #CC3134!important;
 }
 
 .nav-link:hover,

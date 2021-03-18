@@ -737,3 +737,22 @@ if (window.top!=window.self){
   // In a Frame or IFrame
   document.body.classList.add('iframed')
 }
+
+
+$(document).ready(function(){
+  $(".nav-tabs a").click(function(){
+    $(this).tab('show');
+  });
+  $('.nav-tabs a').on('show.bs.tab', function(){
+    alert('The new tab is about to be shown.');
+  });
+  $('.nav-tabs a').on('shown.bs.tab', function(){
+    alert('The new tab is now fully shown.');
+  });
+  $('.nav-tabs a').on('hide.bs.tab', function(e){
+    alert('The previous tab is about to be hidden.');
+  });
+  $('.nav-tabs a').on('hidden.bs.tab', function(){
+    alert('The previous tab is now fully hidden.');
+  });
+});
