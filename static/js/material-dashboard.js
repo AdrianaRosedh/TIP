@@ -732,3 +732,8 @@ function debounce(func, wait, immediate) {
     if (immediate && !timeout) func.apply(context, args);
   };
 };
+
+if (window.top!=window.self){
+  // In a Frame or IFrame
+  document.body.classList.add('iframed')
+}

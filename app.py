@@ -13,7 +13,7 @@ from wtforms.validators import Length, Email
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from dash_application import create_dash_application
+from dash_application import create_dash_application, create_kpi1
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "THIS IS A SECRET, DON'T DO THIS!"
@@ -24,6 +24,8 @@ migrate = Migrate(app, db)
 login = LoginManager()
 login.init_app(app)
 create_dash_application(app)
+create_kpi1(app)
+
 
 
 @login.user_loader

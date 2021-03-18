@@ -23,6 +23,10 @@
   box-sizing: border-box;
 }
 
+#background {
+  background-color: white;
+}
+
 html {
   font-family: sans-serif;
   line-height: 1.15;
@@ -4266,6 +4270,10 @@ tbody.collapse.show {
 .nav-link {
   display: block;
   padding: 0.5rem 1rem;
+}
+
+.nav-item {
+  padding-bottom: 3rem;
 }
 
 .nav-link:hover,
@@ -19741,6 +19749,16 @@ Copyright (c) 2015 Daniel Eden
     margin: 0;
   }
 }
+/* Iframe Modifications */
+iframe:focus {
+  outline: none;
+}
+
+iframe[seamless] {
+  display: block;
+}
+
+/* End of Iframe */
 
 @media (min-width: 992px) {
   .main-panel .navbar .navbar-collapse .navbar-nav .nav-item .nav-link p {
