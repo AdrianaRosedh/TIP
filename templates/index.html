@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container theme-showcase" role="main" style="margin-top: 75px">
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        {% if current_user.is_authenticated %}
+        <h1>Hello {{current_user.email}}</h1>
+        {% else%}
+        <h1>Welcome</h1>
+            <h2>to Iberia's IT Performance measurment Page</h2>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
