@@ -58,6 +58,30 @@ class RegisterForm(FlaskForm):
 def index():
     return render_template("dashboards.html")
 
+@app.route("/raised")
+def kpi1():
+    return render_template("KPI1.html")
+
+@app.route("/solved")
+def kpi2():
+    return render_template("KPI2.html")
+
+@app.route("/sla")
+def kpi3():
+    return render_template("KPI3.html")
+
+@app.route("/backlog")
+def kpi4():
+    return render_template("KPI4.html")
+
+@app.route("/service")
+def kpi5():
+    return render_template("KPI5.html")
+
+@app.route("/availability")
+def kpi6():
+    return render_template("KPI6.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
