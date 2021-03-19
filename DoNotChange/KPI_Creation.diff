@@ -198,12 +198,11 @@ BEGIN
   ORDS.define_service(
     p_module_name    => 'KPI3',
     p_base_path      => 'kpi3/',
-    p_pattern        => 'sla/:mymonth',
+    p_pattern        => 'sla/',
     p_method         => 'GET',
     p_source_type    => ORDS.source_type_collection_feed,
-    p_source         => 'SELECT month, round((SLA_BREACHES_BAJA/(SLA_BREACHES_BAJA+SLA_MET_BAJA))*100,2) as brBAJA, round((SLA_BREACHES_MEDIA/(SLA_BREACHES_MEDIA+SLA_MET_MEDIA))*100,2) as brMEDIA, round((SLA_BREACHES_ALTA/(SLA_BREACHES_ALTA+SLA_MET_ALTA))*100,2) as brALTA, round((SLA_BREACHES_CRITICA/(SLA_BREACHES_CRITICA+SLA_MET_CRITICA))*100,2) as brCRITICA, round((SLA_MET_BAJA/(SLA_BREACHES_BAJA+SLA_MET_BAJA))*100,2) as mtBAJA, round((SLA_MET_MEDIA/(SLA_BREACHES_MEDIA+SLA_MET_MEDIA))*100,2) as mtMEDIA, round((SLA_MET_ALTA/(SLA_BREACHES_ALTA+SLA_MET_ALTA))*100,2) as mtALTA, round((SLA_MET_CRITICA/(SLA_BREACHES_CRITICA+SLA_MET_CRITICA))*100,2) as mtCRITICA
-    
-    FROM KPI3_SLA_ALL where month = :mymonth',
+    p_source         => 'SELECT month, round((SLA_BREACHES_BAJA/(SLA_BREACHES_BAJA+SLA_MET_BAJA))*100,2) as brBAJA, round((SLA_BREACHES_MEDIA/(SLA_BREACHES_MEDIA+SLA_MET_MEDIA))*100,2) as brMEDIA, round((SLA_BREACHES_ALTA/(SLA_BREACHES_ALTA+SLA_MET_ALTA))*100,2) as brALTA, round((SLA_BREACHES_CRITICA/(SLA_BREACHES_CRITICA+SLA_MET_CRITICA))*100,2) as brCRITICA, round((SLA_MET_BAJA/(SLA_BREACHES_BAJA+SLA_MET_BAJA))*100,2) as mtBAJA, round((SLA_MET_MEDIA/(SLA_BREACHES_MEDIA+SLA_MET_MEDIA))*100,2) as mtMEDIA, round((SLA_MET_ALTA/(SLA_BREACHES_ALTA+SLA_MET_ALTA))*100,2) as mtALTA, round((SLA_MET_CRITICA/(SLA_BREACHES_CRITICA+SLA_MET_CRITICA))*100,2) as mtCRITICA    
+    FROM KPI3_SLA_ALL',
     p_items_per_page => 0);
     
   COMMIT;
@@ -212,7 +211,7 @@ END;
 
 --- ENDPOINT
 KPI3:
-https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi3/sla/201801
+https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi3/sla/
 
 --! KP4
 
@@ -258,11 +257,11 @@ BEGIN
   ORDS.define_service(
     p_module_name    => 'KPI5',
     p_base_path      => 'kpi5/',
-    p_pattern        => 'av/:mymonth',
+    p_pattern        => 'av/',
     p_method         => 'GET',
     p_source_type    => ORDS.source_type_collection_feed,
     p_source         => 'SELECT month, Unavailability_time, Availability_percentage, SERVICE
-    FROM KPI5_SERVICE_AV where month = :mymonth',
+    FROM KPI5_SERVICE_AV',
     p_items_per_page => 0);
     
   COMMIT;
@@ -271,7 +270,7 @@ END;
 
 --- ENDPOINT
 KPI5:
-https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi5/av/201801
+https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi5/av/
 
 --! KP6
 
@@ -286,11 +285,11 @@ BEGIN
   ORDS.define_service(
     p_module_name    => 'KPI6',
     p_base_path      => 'kpi6/',
-    p_pattern        => 'monav/:mymonth',
+    p_pattern        => 'monav/',
     p_method         => 'GET',
     p_source_type    => ORDS.source_type_collection_feed,
     p_source         => 'SELECT month, MONTHLY_AV
-    FROM KPI6_MONTHLY_AV where month = :mymonth',
+    FROM KPI6_MONTHLY_AV',
     p_items_per_page => 0);
     
   COMMIT;
@@ -299,7 +298,7 @@ END;
 
 --- ENDPOINT
 KPI6:
-https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi6/monav/201801
+https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi6/monav/
 
 
 --! ALL REST ENDPOINTS:
@@ -311,16 +310,19 @@ KPI2:
 https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi2/incsolved/
 
 KPI3:
-https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi3/sla/201801
+https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi3/sla/
 
 KPI4:
 https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi4/BL/
 
 KPI5:
-https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi5/av/201801
+https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi5/av/
 
 KPI6:
-https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi6/monav/201801
+https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi6/monav/
+
+KPI7:
+https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi7/availability/
 
 
 -- INNER JOIN
@@ -344,3 +346,19 @@ SELECT * FROM AVAILABILITY;
 UPDATE AVAILABILITY
 WHERE ci_name IS NULL
 Tranform  string 
+
+-- End point
+
+BEGIN
+  ORDS.define_service(
+    p_module_name    => 'KPI7',
+    p_base_path      => 'kpi7/',
+    p_pattern        => 'availability/',
+    p_method         => 'GET',
+    p_source_type    => ORDS.source_type_collection_feed,
+    p_source         => 'SELECT * FROM availability',
+    p_items_per_page => 0);
+    
+  COMMIT;
+END;
+/

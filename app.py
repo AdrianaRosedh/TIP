@@ -13,7 +13,7 @@ from wtforms.validators import Length, Email
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from dash_application import create_dash_application
+from dash_application import create_kpi1, create_kpi2, create_kpi3, create_kpi4, create_kpi5, create_kpi6
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "THIS IS A SECRET, DON'T DO THIS!"
@@ -23,7 +23,12 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager()
 login.init_app(app)
-create_dash_application(app)
+create_kpi1(app)
+create_kpi2(app)
+create_kpi3(app)
+create_kpi4(app)
+create_kpi5(app)
+create_kpi6(app)
 
 
 
