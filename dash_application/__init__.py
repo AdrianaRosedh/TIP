@@ -24,10 +24,6 @@ for dict in KPI1JSON:
     k1_incidences_numbers.append(dict["incidences_number"])
     k1_priorities.append(dict["priority"])
 
-#print(k1_months)
-#print(k1_incidences_numbers)
-#print(k1_priorities)
-
 k1_df = pd.DataFrame({
     "Months": k1_months,
     "Number of incidents": k1_incidences_numbers,
@@ -46,55 +42,6 @@ def create_kpi1(flask_app):
     )
 
     return dash_app
-
-# #COMPLICATED
-# def create_dash_application(flask_app):
-#     dash_app = dash.Dash(server=flask_app, name="Dashboard", url_base_pathname='/kpi1C/')
-    
-#     dash_app.layout= html.Div(children=[
-#     html.H1(children='IBERIA DASHBOARD'),
-#     #KPI1
-#     dcc.Dropdown(
-#         id="month",
-#         options=[{"label": 'January 2018', "value":'201801'},
-#                  {"label": 'February 2018', "value":'201802'},
-#                  {"label": 'March 2018', "value":'201803'},
-#                  ],
-#         value="201801"
-#     ),
-#     dcc.Graph(
-#         id='kpi1',
-#         figure={
-#             'data': [],
-#             'layout': {
-#                 'title': ''
-#             }
-#         }
-#     )
-# ])
-#     #KPI1 DATA - total incidences
-#     incidences= {}
-#     for i in KPI1JSON["items"]:
-#         if i['month'] in incidences:
-#             incidences[i['month']].append(i['incidences_number'])
-#         else: 
-#             incidences[i['month']]= [i["incidences_number"]]
-    
-#     @dash_app.callback(
-#     Output(component_id="kpi1",component_property="figure"),
-#     [Input(component_id="month", component_property="value")]
-#     )
-#     def update_KPI1(value):
-#         return {
-#             "data": [
-#             {'x': ["Baja", "Media", "Alta" "Critica"], 'y': incidences[value], 'type': 'bar', 'name': value},
-#             ],
-#       "layout": {
-#         "title": "Incidences per month"
-#       }
-#     }
-
-#     return dash_app
 
 #GET KPI2
 KPI2 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi1/incvol/"
@@ -132,102 +79,52 @@ KPI3 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapp
 r3 = requests.get(KPI3)
 KPI3JSON = r3.json()["items"]
 
-#KPI3
-kpi3_months = []
-kpi3_brbaja=[]
-kpi3_brmedia=[]
-kpi3_bralta=[]
-kpi3_brcritica=[]
-kpi3_mtbaja=[]
-kpi3_mtmedia=[]
-kpi3_mtalta=[]
-kpi3_mtcritica=[]
+#GET KPI3 Fancy Version
 
-for dict in KPI3JSON:
-    kpi3_months.append(dict["month"])
-    kpi3_brbaja.append(dict["brbaja"])
-    kpi3_brmedia.append(dict["brmedia"])
-    kpi3_bralta.append(dict["bralta"])
-    kpi3_brcritica.append(dict["brcritica"])
-    kpi3_mtbaja.append(dict["mtbaja"])
-    kpi3_mtmedia.append(dict["mtmedia"])
-    kpi3_mtalta.append(dict["mtalta"])
-    kpi3_mtcritica.append(dict["mtcritica"])
-
-kpi3_df = pd.DataFrame({
-    "Months": kpi3_months,
-    "brbaja": kpi3_brbaja,
-    "brmedia": kpi3_brmedia,
-    "bralta": kpi3_bralta,
-    "brcritica":kpi3_brcritica,
-    "mtbaja": kpi3_mtbaja,
-    "mtmedia": kpi3_mtmedia,
-    "mtalta": kpi3_mtalta,
-    "mtcritica":kpi3_mtcritica,
-})
+sla= {}
+for i in KPI3JSON:
+    if i['month'] in sla:
+        sla[i['month']].append(i['brbaja'],i['mtbaja'],i['brmedia'],i['mtmedia'],i['bralta'],i['mtalta'],i['brcritica'],i['mtcritica'])
+    else: 
+        sla[i['month']]= [i["brbaja"],i['mtbaja'],i['brmedia'],i['mtmedia'],i['bralta'],i['mtalta'],i['brcritica'],i['mtcritica']]
 
 def create_kpi3(flask_app):
-    dash_app = dash.Dash(server=flask_app, name="kpi3", url_base_pathname='/kpi3/')
+    dash_app = dash.Dash(server=flask_app, name="SLA", url_base_pathname='/kpi3/')    
     
     dash_app.layout = html.Div(children=[
-        # BAJA
-        html.Div([
-            html.H1(children='Hello Dash'),
-
-            html.Div(children='''
-                Dash: A web application framework for Python.
-            '''),
-
-            dcc.Graph(
-            id='kpi3-graph1',
-            figure= px.bar(kpi3_df, x="Months", y=["brbaja", "mtbaja"], barmode="group")
-            ),  
-        ]),
-        # MEDIA
-        html.Div([
-            html.H1(children='Hello Dash'),
-
-            html.Div(children='''
-                Dash: A web application framework for Python.
-            '''),
-
-            dcc.Graph(
-            id='kpi3-graph2',
-            figure= px.bar(kpi3_df, x="Months", y=["brmedia", "mtmedia"], barmode="group")
-            ), 
-        
-        ]),
-        # ALTA
-        html.Div([
-            html.H1(children='Hello Dash'),
-
-            html.Div(children='''
-                Dash: A web application framework for Python.
-            '''),
-
-            dcc.Graph(
-            id='kpi3-graph3',
-            figure= px.bar(kpi3_df, x="Months", y=["bralta", "mtalta"], barmode="group")
-            ), 
-        
-        ]),
-        # CRITICA
-        html.Div([
-            html.H1(children='Hello Dash'),
-
-            html.Div(children='''
-                Dash: A web application framework for Python.
-            '''),
-
-            dcc.Graph(
-            id='kpi3-graph4',
-            figure= px.bar(kpi3_df, x="Months", y=["brcritica", "mtcritica"], barmode="group")
-            ), 
-        
-        ]),
-        
+        #KPI3
+        dcc.Dropdown(
+            id="month",
+            options=[{"label": 'January 2018', "value":'201801'},
+                    {"label": 'February 2018', "value":'201802'},
+                    {"label": 'March 2018', "value":'201803'}
+                    ],
+            value="201801"
+        ),
+        dcc.Graph(
+            id='kpi3',
+            figure={
+                'data':[],           
+            }
+        )  
     ])
-    return dash_app
+    @dash_app.callback(
+    Output(component_id="kpi3",component_property="figure"),
+    [Input(component_id="month", component_property="value")]
+    )
+    def update_KPI3(value):
+        # fig = px.bar(dash_app, x="Months", y=["bralta", "mtalta"], barmode="group")
+        return {
+            "data": [
+            {'x': ['BR BAJA','MT BAJA','BR MEDIA','MT MEDIA','BR ALTA','MT ALTA','BT CRITICA','MT CRITICA'], 'y': sla[value], 'type': 'bar', 'name': value},
+            
+            ],
+        "layout": {
+            "title": "SLAs" 
+        }
+        }
+
+        return dash_app
 
 #GET KPI4
 KPI4 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi4/BL/"
@@ -299,7 +196,7 @@ def create_kpi5(flask_app):
     )
     return dash_app
 
-#GET KPI4
+#GET KPI6
 KPI6 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi6/monav/"
 r6 = requests.get(KPI6)
 KPI6JSON = r6.json()["items"]
@@ -327,3 +224,59 @@ def create_kpi6(flask_app):
         
     )
       return dash_app
+
+#KPI7
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output
+import plotly.express as px
+
+k7_months = []
+k7_unavailability_time = []
+k7_availability_percentage = []
+k7_service = []
+
+for dict in KPI5JSON:
+    k7_months.append(dict["month"])
+    k7_unavailability_time.append(dict["unavailability_time"])
+    k7_availability_percentage.append(dict["availability_percentage"])
+    k7_service.append(dict["service"])
+
+k7_df = pd.DataFrame({
+    "Months": k7_months,
+    "Number of Unavailability": k7_unavailability_time,
+    "Percentage of Availability": k7_availability_percentage,
+    "Service": k7_service,
+})
+
+def create_kpi7(flask_app):
+    dash_app = dash.Dash(server=flask_app, name = "kpi7", url_base_pathname='/kpi7/')
+
+    dash_app.layout = html.Div([
+        html.P("Names:"),
+        dcc.Dropdown(
+            id='names', 
+            value='day', 
+            options=[{'value': x, 'label': x} 
+                    for x in ['Months', "Service"]],
+            clearable=False
+        ),
+        html.P("Values:"),
+        dcc.Dropdown(
+            id='values', 
+            value='total_bill', 
+            options=[{'value': x, 'label': x} 
+                    for x in ['Number of Unavailability', 'Percentage of Availability']],
+            clearable=False
+        ),
+        dcc.Graph(id="pie-chart"),
+    ])
+
+    @dash_app.callback(
+        Output("pie-chart", "figure"), 
+        [Input("names", "value"), 
+        Input("values", "value")])
+    def generate_chart(names, values):
+        fig = px.pie(k7_df, values=values, names=names)
+        return fig

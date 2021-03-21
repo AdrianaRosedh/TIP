@@ -12,18 +12,19 @@
   <!-- Fonts and icons -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+  {%- block styles %}
   <!-- Style CSS -->
-  <link href="{{ url_for('static', filename='css/material-dashboard.css')}}"  rel="stylesheet" />
-  <link href="{{ url_for('static', filename='css/main.css')}}"  rel="stylesheet" />
-  <script src="{{url_for('static', filename='js/material-dashboard.js')}}"></script>
-  
+  <link href="{{ url_for('static', filename='css/material-dashboard.css')}}"  rel="stylesheet" /> 
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"  rel="stylesheet" />  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css"  rel="stylesheet" />  
 
+  {%- endblock styles %}
   {% block head %}{% endblock %}
 </head>
 
 <body>
   <div class="wrapper ">
-    <div class="sidebar" data-color="green" data-background-color="white">
+    <div class="sidebar" data-color="white" data-background-color="white">
       <!-- data-color="purple | azure | green | orange | danger" -->
       <div class="logo">
         <a href="{{ url_for('index') }}" class="simple-text logo-mini">
@@ -98,7 +99,12 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('login') }}">
+                <a class="nav-link" href="{{ url_for('logout') }}">
+                  <i class="material-icons">logout</i> Logout
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('profile') }}">
                   <i class="material-icons">perm_identity</i> Profile
                 </a>
               </li>
@@ -137,6 +143,8 @@
       
     </div>
   </div>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js" style="js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" style="js"></script>
 </body>
 
 </html>

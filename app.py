@@ -30,8 +30,6 @@ create_kpi4(app)
 create_kpi5(app)
 create_kpi6(app)
 
-
-
 @login.user_loader
 def user_loader(user_id):
     return User.query.filter_by(id=user_id).first()
@@ -56,7 +54,11 @@ class RegisterForm(FlaskForm):
 
 @app.route("/")
 def index():
-    return render_template("dashboards.html")
+    return render_template("dashboard.html")
+
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
 
 @app.route("/raised")
 def kpi1():
@@ -118,7 +120,7 @@ def register():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":

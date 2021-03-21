@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
+{% block title %}Backlogs{% endblock %}
+
 {% block content %}
-<div class="container theme-showcase" role="main">
-    <iframe src="http://127.0.0.1:5000/kpi4" frameborder="0" width=700rem height=600rem id="my-iframe" ></iframe>
+<div class="embed-responsive embed-responsive-16by9" role="main">
+    <iframe src="/kpi4" frameborder="0" width=700rem height=600rem id="my-iframe" ></iframe>
 </div> 
 {% endblock %}
 

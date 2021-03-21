@@ -1037,8 +1037,8 @@ pre code {
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
+  margin-right: 15px;
+  margin-left: 15px;
 }
 
 .no-gutters {
@@ -4283,6 +4283,12 @@ tbody.collapse.show {
 .active a, .material-icons{
   color: #CC3134!important;
 }
+
+.btn.btn-danger {
+  background-color: #CC3134 !important; 
+  border-color: #CC3134 !important; 
+}
+
 
 .nav-link:hover,
 .nav-link:focus {
