@@ -49,12 +49,6 @@ def create_kpi1(flask_app):
         )
     ])
 
-    # for view_function in dash_app.server.view_functions:
-    #     if view_function.startswith(dash_app.config.url_base_pathname):
-    #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
-
-    return dash_app
-
     @dash_app.callback(
         Output(component_id="kpi1",component_property="figure"),
         [Input(component_id="month", component_property="value")]
@@ -68,6 +62,12 @@ def create_kpi1(flask_app):
                 "title": "Incidences per month"
             }
         }
+    
+    # for view_function in dash_app.server.view_functions:
+    #     if view_function.startswith(dash_app.config.url_base_pathname):
+    #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+  
+    return dash_app
 
 
 #GET KPI2
@@ -80,9 +80,19 @@ kpi2_months = []
 kpi2_incidences_numbers = []
 
 for dict in KPI2JSON:
-    kpi2_months.append(dict["month"])
-    kpi2_incidences_numbers.append(dict["incidences_number"])
-
+   if dict["month"] == '201801':
+       dict["month"] = 'Jan 2018'
+       kpi2_months.append(dict["month"])
+       kpi2_incidences_numbers.append(dict["incidences_number"])
+   elif dict["month"] == '201802':
+       dict["month"] = 'Feb 2018'
+       kpi2_months.append(dict["month"])
+       kpi2_incidences_numbers.append(dict["incidences_number"])
+   elif dict["month"] == '201803':
+       dict["month"] = 'Mar 2018'
+       kpi2_months.append(dict["month"])
+       kpi2_incidences_numbers.append(dict["incidences_number"])
+    
 
 kpi2_df = pd.DataFrame({
     "Months": kpi2_months,
@@ -96,9 +106,9 @@ def create_kpi2(flask_app):
         dcc.Graph(
             id='kpi2-graph',
             figure= px.bar(kpi2_df, x="Months", y="Number of incidents", barmode="group")
-        ),  
-        
-    )
+        ),    
+    )  
+
     # for view_function in dash_app.server.view_functions:
     #     if view_function.startswith(dash_app.config.url_base_pathname):
     #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
@@ -139,25 +149,22 @@ def create_kpi3(flask_app):
             }
         )  
     ])
-
-    # for view_function in dash_app.server.view_functions:
-    #     if view_function.startswith(dash_app.config.url_base_pathname):
-    #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
-
-    return dash_app
-
+   
     @dash_app.callback(
-    Output(component_id="kpi3",component_property="figure"),
-    [Input(component_id="month", component_property="value")]
+        Output(component_id="kpi3",component_property="figure"),
+        [Input(component_id="month", component_property="value")]
     )
     def update_KPI3(value):
+        # fig = px.bar(dash_app, x="Months", y=["bralta", "mtalta"], barmode="group")
         return {
             "data": [
             {'x': ['BR BAJA','MT BAJA','BR MEDIA','MT MEDIA','BR ALTA','MT ALTA','BT CRITICA','MT CRITICA'], 'y': sla[value], 'type': 'bar', 'name': value},
             
-            ]
+            ],
+        "layout": {
+            "title": "SLAs" 
         }
-
+        }
         # for view_function in dash_app.server.view_functions:
         #     if view_function.startswith(dash_app.config.url_base_pathname):
         #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
@@ -169,17 +176,23 @@ KPI4 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapp
 r4 = requests.get(KPI4)
 KPI4JSON = r4.json()["items"]
 
-#SIMPLE VERSION 
-
+#KPI4
 k4_months = []
 k4_incidences_numbers = []
 
 for dict in KPI4JSON:
-    k4_months.append(dict["month"])
-    k4_incidences_numbers.append(dict["incidences_number"])
-
-#print(k4_months)
-#print(k4_incidences_numbers)
+   if dict["month"] == '201801':
+       dict["month"] = 'Jan 2018'
+       k4_months.append(dict["month"])
+       k4_incidences_numbers.append(dict["incidences_number"])
+   elif dict["month"] == '201802':
+       dict["month"] = 'Feb 2018'
+       k4_months.append(dict["month"])
+       k4_incidences_numbers.append(dict["incidences_number"])
+   elif dict["month"] == '201803':
+       dict["month"] = 'Mar 2018'
+       k4_months.append(dict["month"])
+       k4_incidences_numbers.append(dict["incidences_number"])
 
 k4_df = pd.DataFrame({
     "Months": k4_months,
@@ -188,12 +201,13 @@ k4_df = pd.DataFrame({
 
 def create_kpi4(flask_app):
     dash_app = dash.Dash(server=flask_app, name="kpi4", url_base_pathname='/kpi4/')
-    
+        
     dash_app.layout = html.Div(
         dcc.Graph(
             id='kpi4-graph',
             figure= px.bar(k4_df, x="Months", y="Number of incidents", barmode="group")
-        ),       
+        ),  
+            
     )
     # for view_function in dash_app.server.view_functions:
     #     if view_function.startswith(dash_app.config.url_base_pathname):

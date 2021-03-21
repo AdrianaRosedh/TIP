@@ -16,6 +16,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dash_application import create_kpi1, create_kpi2, create_kpi3, create_kpi4, create_kpi5, create_kpi6
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "THIS IS A SECRET, DON'T DO THIS!"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite.db"
 Bootstrap(app)
@@ -50,7 +51,6 @@ class RegisterForm(FlaskForm):
     email = StringField("email", validators=[Email()])
     password = PasswordField("password", validators=[Length(min=5)])
     repeat_password = PasswordField("repated_password", validators=[Length(min=5)])
-
 
 @app.route("/")
 def index():
@@ -88,7 +88,6 @@ def kpi6():
 def permision():
     return render_template("permision.html")
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -102,7 +101,6 @@ def login():
             return redirect(url_for("index"))
 
     return render_template("login.html", form=form)
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -120,12 +118,10 @@ def register():
 
     return render_template("register.html", form=form)
 
-
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for("login"))
-
 
 if __name__ == "__main__":
     app.run(debug = True)
