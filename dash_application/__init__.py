@@ -7,6 +7,7 @@ import pandas as pd
 import requests
 import json
 from dash.dependencies import Input, Output
+from flask_login import LoginManager, login_user, login_required
 
 #GET KPI1
 KPI1 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi1/incvol/"
@@ -48,6 +49,12 @@ def create_kpi1(flask_app):
         )
     ])
 
+    # for view_function in dash_app.server.view_functions:
+    #     if view_function.startswith(dash_app.config.url_base_pathname):
+    #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+
+    return dash_app
+
     @dash_app.callback(
         Output(component_id="kpi1",component_property="figure"),
         [Input(component_id="month", component_property="value")]
@@ -61,7 +68,6 @@ def create_kpi1(flask_app):
                 "title": "Incidences per month"
             }
         }
-        return dash_app
 
 
 #GET KPI2
@@ -93,6 +99,10 @@ def create_kpi2(flask_app):
         ),  
         
     )
+    # for view_function in dash_app.server.view_functions:
+    #     if view_function.startswith(dash_app.config.url_base_pathname):
+    #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+
     return dash_app
 
 #GET KPI3
@@ -129,6 +139,13 @@ def create_kpi3(flask_app):
             }
         )  
     ])
+
+    # for view_function in dash_app.server.view_functions:
+    #     if view_function.startswith(dash_app.config.url_base_pathname):
+    #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+
+    return dash_app
+
     @dash_app.callback(
     Output(component_id="kpi3",component_property="figure"),
     [Input(component_id="month", component_property="value")]
@@ -140,6 +157,10 @@ def create_kpi3(flask_app):
             
             ]
         }
+
+        # for view_function in dash_app.server.view_functions:
+        #     if view_function.startswith(dash_app.config.url_base_pathname):
+        #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
 
         return dash_app
 
@@ -174,6 +195,10 @@ def create_kpi4(flask_app):
             figure= px.bar(k4_df, x="Months", y="Number of incidents", barmode="group")
         ),       
     )
+    # for view_function in dash_app.server.view_functions:
+    #     if view_function.startswith(dash_app.config.url_base_pathname):
+    #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+
     return dash_app
 
 #GET KPI5
@@ -211,6 +236,10 @@ def create_kpi5(flask_app):
         ),  
         
     )
+    # for view_function in dash_app.server.view_functions:
+    #     if view_function.startswith(dash_app.config.url_base_pathname):
+    #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+
     return dash_app
 
 #GET KPI6
@@ -231,13 +260,17 @@ k6_df = pd.DataFrame({
     })
         
 def create_kpi6(flask_app):
-      dash_app = dash.Dash(server=flask_app, name="kpi6", url_base_pathname='/kpi6/')
+    dash_app = dash.Dash(server=flask_app, name="kpi6", url_base_pathname='/kpi6/')
       
-      dash_app.layout = html.Div(
+    dash_app.layout = html.Div(
         dcc.Graph(
             id='kpi6-graph',
             figure= px.bar(k6_df, x="Months", y="Average", barmode="group")
-        ),  
-        
-    )
-      return dash_app
+            ),
+        )
+
+    # for view_function in dash_app.server.view_functions:
+    #     if view_function.startswith(dash_app.config.url_base_pathname):
+    #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+
+    return dash_app

@@ -18,6 +18,11 @@
     {%- block styles %}
     <!-- Bootstrap -->
     <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+    <style>
+    body {
+        background-image: url({{ url_for('static', filename='img/background.svg') }})
+        }
+    </style>
     {%- endblock styles %}
     {%- endblock head %}
   </head>
@@ -27,14 +32,14 @@
     {%- endblock navbar %}
     {% block content -%}
     <div class="container body-content" >
-        <div class="container theme-showcase" role="main" style="margin-top: 25rem;">
+        <div class="container theme-showcase" role="main" style="margin-top: 20rem;">
           <img class="rounded mx-auto d-block img-fluid" src="{{ url_for('static', filename='img/logo.svg')}}" style="max-height: 7rem; margin-bottom: 5rem" alt="Logo">         
             <form action="{{ url_for('login') }}" method="POST">
               <h1>IT Control Center</h1>
                 {{ form.hidden_tag() }}
                 {{ wtf.form_field(form.email) }}
                 {{ wtf.form_field(form.password) }}
-                <input class="btn btn-danger" type="button" value="login">
+                <input class="btn btn-danger" type="submit" value="login">
             </form>
         </div>
     </div>

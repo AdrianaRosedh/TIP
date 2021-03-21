@@ -1,17 +1,58 @@
-{% extends "base.html" %}
 
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}{{ super() }} | Register{% endblock %}
+{% block doc -%}
+<!DOCTYPE html>
+<html{% block html_attribs %}{% endblock html_attribs %}>
+{%- block html %}
+  <head>
+    {%- block head %}
+    <title>{% block title %}{{title|default}}{% endblock title %}</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="{{ url_for('static', filename='css/material-dashboard.css')}}"  rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.svg')}}" />
 
-{% block content %}
-<div class="container theme-showcase" role="main" style="margin-top: 75px">
-    <form action="{{ url_for('register') }}" method="POST">
-        {{ form.hidden_tag() }}
-        {{ wtf.form_field(form.email) }}
-        {{ wtf.form_field(form.password) }}
-        {{ wtf.form_field(form.repeat_password) }}
-        <input type="submit" value="register">
-    </form>
-</div>
-{% endblock %}
+    {%- block metas %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- endblock metas %}
+
+    {%- block styles %}
+    <!-- Bootstrap -->
+    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+    <style>
+    body {
+        background-image: url({{ url_for('static', filename='img/background.svg') }})
+        }
+    </style>
+    {%- endblock styles %}
+    {%- endblock head %}
+  </head>
+  <body{% block body_attribs %}{% endblock body_attribs %}>
+    {% block body -%}
+    {% block navbar %}
+    {%- endblock navbar %}
+    {% block content -%}
+    <div class="container body-content" >
+        <div class="container theme-showcase" role="main" style="margin-top: 20rem">
+            <img class="rounded mx-auto d-block img-fluid" src="{{ url_for('static', filename='img/logo.svg')}}" style="max-height: 7rem; margin-bottom: 5rem" alt="Logo">  
+            <form action="{{ url_for('register') }}" method="POST">
+                {{ form.hidden_tag() }}
+                {{ wtf.form_field(form.email) }}
+                {{ wtf.form_field(form.password) }}
+                {{ wtf.form_field(form.repeat_password) }}
+                <input type="submit" value="register">
+            </form>
+        </div>
+    </div>
+    
+    {%- endblock content %}
+
+    {% block scripts %}
+    <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
+    <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+    {%- endblock scripts %}
+    {%- endblock body %}
+  </body>
+{%- endblock html %}
+</html>
+{% endblock doc -%}
