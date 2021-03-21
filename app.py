@@ -54,7 +54,7 @@ class RegisterForm(FlaskForm):
 
 @app.route("/")
 def index():
-    return render_template("dashboard.html")
+    return render_template("index.html")
 
 @app.route("/profile")
 def profile():
@@ -83,6 +83,10 @@ def kpi5():
 @app.route("/availability")
 def kpi6():
     return render_template("KPI6.html")
+
+@app.route("/permision")
+def permision():
+    return render_template("permision.html")
 
 
 @app.route("/login", methods=["GET", "POST"])

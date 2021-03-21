@@ -31,17 +31,38 @@ k1_df = pd.DataFrame({
 })
 
 def create_kpi1(flask_app):
-    dash_app = dash.Dash(server=flask_app, name="kpi1", url_base_pathname='/kpi1/')
-    
-    dash_app.layout = html.Div(
+    dash_app = dash.Dash(server=flask_app, name="incidences", url_base_pathname='/kpi1/')       
+    dash_app.layout = html.Div(children=[
+        #KPI1
+        dcc.Dropdown(
+            id="month",
+            options=[{"label": 'January 2018', "value":'201801'},
+                    {"label": 'February 2018', "value":'201802'},
+                    {"label": 'March 2018', "value":'201803'},
+                    ],
+            value="201801"
+        ),
         dcc.Graph(
-            id='kpi1-graph',
+            id='kpi1',
             figure= px.bar(k1_df, x="Months", y="Number of incidents", color="Priority", barmode="group")
-        ),  
-        
-    )
+        )
+    ])
 
-    return dash_app
+    @dash_app.callback(
+        Output(component_id="kpi1",component_property="figure"),
+        [Input(component_id="month", component_property="value")]
+    )
+    def update_KPI1(value):
+        return {
+            "data": [
+            {'x': ["Baja", "Media", "Alta", "Critica"], 'y': k1_month[value], 'type': 'bar', 'name': value},
+            ],
+            "layout": {
+                "title": "Incidences per month"
+            }
+        }
+        return dash_app
+
 
 #GET KPI2
 KPI2 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi1/incvol/"
@@ -113,15 +134,11 @@ def create_kpi3(flask_app):
     [Input(component_id="month", component_property="value")]
     )
     def update_KPI3(value):
-        # fig = px.bar(dash_app, x="Months", y=["bralta", "mtalta"], barmode="group")
         return {
             "data": [
             {'x': ['BR BAJA','MT BAJA','BR MEDIA','MT MEDIA','BR ALTA','MT ALTA','BT CRITICA','MT CRITICA'], 'y': sla[value], 'type': 'bar', 'name': value},
             
-            ],
-        "layout": {
-            "title": "SLAs" 
-        }
+            ]
         }
 
         return dash_app
@@ -224,59 +241,3 @@ def create_kpi6(flask_app):
         
     )
       return dash_app
-
-#KPI7
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-from dash.dependencies import Input, Output
-import plotly.express as px
-
-k7_months = []
-k7_unavailability_time = []
-k7_availability_percentage = []
-k7_service = []
-
-for dict in KPI5JSON:
-    k7_months.append(dict["month"])
-    k7_unavailability_time.append(dict["unavailability_time"])
-    k7_availability_percentage.append(dict["availability_percentage"])
-    k7_service.append(dict["service"])
-
-k7_df = pd.DataFrame({
-    "Months": k7_months,
-    "Number of Unavailability": k7_unavailability_time,
-    "Percentage of Availability": k7_availability_percentage,
-    "Service": k7_service,
-})
-
-def create_kpi7(flask_app):
-    dash_app = dash.Dash(server=flask_app, name = "kpi7", url_base_pathname='/kpi7/')
-
-    dash_app.layout = html.Div([
-        html.P("Names:"),
-        dcc.Dropdown(
-            id='names', 
-            value='day', 
-            options=[{'value': x, 'label': x} 
-                    for x in ['Months', "Service"]],
-            clearable=False
-        ),
-        html.P("Values:"),
-        dcc.Dropdown(
-            id='values', 
-            value='total_bill', 
-            options=[{'value': x, 'label': x} 
-                    for x in ['Number of Unavailability', 'Percentage of Availability']],
-            clearable=False
-        ),
-        dcc.Graph(id="pie-chart"),
-    ])
-
-    @dash_app.callback(
-        Output("pie-chart", "figure"), 
-        [Input("names", "value"), 
-        Input("values", "value")])
-    def generate_chart(names, values):
-        fig = px.pie(k7_df, values=values, names=names)
-        return fig
