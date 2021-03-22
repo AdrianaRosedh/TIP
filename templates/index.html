@@ -5,6 +5,9 @@
 {% block content %}
 <div class="container center" style="margin-top: 5rem">
 
+    {% if current_user.is_authenticated %}
+    <h1>you are logged in {{current_user.email}}</h1>
+    {% endif %} 
     <div class="intro text-center">
         <h1>Welcome to Iberia's IT Control Page! </h1>
         <h2>Take a look at our data!</h2>
