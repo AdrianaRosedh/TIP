@@ -13,12 +13,12 @@ from wtforms.validators import Length, Email
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from dash_application import create_kpi1, create_kpi2, create_kpi3, create_kpi4, create_kpi5, create_kpi6
+from dash_application import create_kpi1, create_kpi2, create_kpi3, create_kpi4, create_kpi5a, create_kpi5bjan, create_kpi5bfeb, create_kpi5bmar, create_kpi6a, create_kpi6b, create_kpi6c
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "THIS IS A SECRET, DON'T DO THIS!"
-#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite.db"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:tiprosedb@/User?unix_socket=/cloudsql/tiprose:europe-west1:tiprosedb"
 Bootstrap(app)
 db = SQLAlchemy(app)
@@ -29,8 +29,14 @@ create_kpi1(app)
 create_kpi2(app)
 create_kpi3(app)
 create_kpi4(app)
-create_kpi5(app)
-create_kpi6(app)
+create_kpi5a(app)
+create_kpi5bjan(app)
+create_kpi5bfeb(app)
+create_kpi5bmar(app)
+create_kpi6a(app)
+create_kpi6b(app)
+create_kpi6c(app)
+
 
 @login.user_loader
 def user_loader(user_id):
@@ -56,6 +62,10 @@ class RegisterForm(FlaskForm):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/test")
+def test():
+    return render_template("test.html")
 
 @app.route("/profile")
 def profile():
@@ -131,5 +141,5 @@ def dbupgrade():
     upgrade(directory=migrate.directory)
     return 'migrated'
 
-#if __name__ == "__main__":
- #   app.run(debug = True)
+# if __name__ == "__main__":
+#    app.run(debug = True)

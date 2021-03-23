@@ -36,43 +36,43 @@
           <li class="nav-item active  ">
             <a class="nav-link" class="tab-pane fade in active" href="/">
               <i class="material-icons">dashboard</i>
-              <p>Home</p>
+              <p>Dashboard</p>
             </a>
           </li>
           <li class="nav-item active  ">
             <a class="nav-link" class="tab-pane fade" href="/raised">
               <i class="material-icons">equalizer</i>
-              <p>Incidents Raised</p>
+              <p>Raised</p>
             </a>
           </li>
           <li class="nav-item active  ">
             <a class="nav-link" class="tab-pane fade" href="/solved">
               <i class="material-icons">equalizer</i>
-              <p>Incidents Solved</p>
+              <p>Solved</p>
             </a>
           </li>
           <li class="nav-item active  ">
             <a class="nav-link" class="tab-pane fade" href="/sla">
               <i class="material-icons">equalizer</i>
-              <p>SLA Dashboard</p>
+              <p>SLA</p>
             </a>
           </li>
           <li class="nav-item active  ">
             <a class="nav-link" data-toggle="tab" href="/backlog">
               <i class="material-icons">equalizer</i>
-              <p>Backlog Incidents</p>
+              <p>Backlog</p>
             </a>
           </li>
           <li class="nav-item active  ">
             <a class="nav-link" data-toggle="tab" href="/service">
               <i class="material-icons">equalizer</i>
-              <p>Services Unavailability</p>
+              <p>Service</p>
             </a>
           </li>
           <li class="nav-item active  ">
             <a class="nav-link" data-toggle="tab" href="/availability">
               <i class="material-icons">equalizer</i>
-              <p>Monthly Availability</p>
+              <p>Availability</p>
             </a>
           </li>
           <li class="nav-item active  ">
@@ -91,45 +91,55 @@
           <div class="navbar-wrapper">
             <a class="navbar-brand" href="javascript:;">{% block title %}{% endblock %}</a>
           </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="navbar-toggler-icon icon-bar"></span>
-            <span class="navbar-toggler-icon icon-bar"></span>
-            <span class="navbar-toggler-icon icon-bar"></span>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            span class="navbar-toggler-icon"></span>
+           </button>
+            <ul>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{{ url_for('login') }}">Nosotros</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{{ url_for('register') }}">Servicios</a>
+                  </li>
+                </ul>
+              </div>            
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-light sticky-top" id="mainNav">
+        <div class="container text-grey">
+          <a href="{{ url_for('index') }}" class="navbar-brand js-scroll-trigger" style="color:#2b2b2b">
+            <img src="{{ url_for('static', filename='img/OPTIMUM.png') }}" height="60px" margin="50%" alt="Logo Optimum">
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse justify-content-end">
-            <ul class="navbar-nav">
-              {% if current_user.is_authenticated %}
-
-              {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('login') }}">
-                  <i class="material-icons">login</i> Login
-                </a>
-              </li>
-              {% endif %} 
-              {% if current_user.is_authenticated %}
-
-              {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('register') }}">
-                  <i class="material-icons">login</i> Register
-                </a>
-              </li>
-              {% endif %} 
-              {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('logout') }}">
-                  <i class="material-icons">logout</i> Logout
-                </a>
-              </li>
-              {% endif %} 
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('profile') }}">
-                  <i class="material-icons">perm_identity</i> Profile
-                </a>
-              </li>
-              <!-- your navbar here -->
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <div>
+                  <div class="dropdown">
+                  <a href="{{ url_for('index') }}" type="button" class="btn btn-danger">Home</a> 
+                  <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dashboards
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="/incidences_per_month">Incidences per Month</a>
+                    <a class="dropdown-item" href="/sla">Service-Level Agreements</a>
+                    <a class="dropdown-item" href="/incidences_in_backlog">Incidences in Backlog</a>
+                    <a class="dropdown-item" href="/monthly_availability_percentage">MAP</a>
+                    <a class="dropdown-item" href="/mut_per_critical_service">MUT per Critical Services</a>
+                  </div>
+                <a href="{{ url_for('logout') }}" type="button" class="btn btn-outline-danger">Logout</a>
+              </div> 
+              {% else%}
+              <div>
+                <a href="{{ url_for('login') }}"  type="button" class="btn btn-outline-danger">Login</a>
+                <a href="{{ url_for('register') }}"  type="button" class="btn btn-danger">Register</a> 
+              </div>
+              {% endif %}
             </ul>
           </div>
         </div>
@@ -160,7 +170,8 @@
           </div>
           <!-- your footer here -->
         </div>
-      </footer>      
+      </footer>
+      
     </div>
   </div>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js" style="js"></script>

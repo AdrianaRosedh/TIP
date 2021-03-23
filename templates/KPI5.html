@@ -1,10 +1,37 @@
 {% extends "base.html" %}
 
-{% block title %}Critical Service Availability{% endblock %}
+{% block title %}Services Unavailability{% endblock %}
 
 {% block content %}
-<div class="embed-responsive embed-responsive-16by9" role="main">
-    <iframe src="/kpi5" frameborder="0" width=700rem height=600rem id="my-iframe" ></iframe>
-</div> 
+
+<style>     
+    .frame{
+        display:inline-block;
+        height: 200px;
+        margin-top: -80px;
+    }
+
+</style>
+
+        <div class="d-flex align-items-center justify-content-center" role="main">
+            <div class="frame">
+                <iframe src='/kpi5/jan/' frameborder="0" width=350rem height=325rem id="my-iframe"scrolling="no" ></iframe> 
+                <h4 class="text-center">January 2018</h4>
+            </div>
+            <div class="frame">
+                <iframe src='/kpi5/feb/' frameborder="0" width=350rem height=325rem id="my-iframe" scrolling="no"></iframe> 
+                <h4 class="text-center">February 2018</h4>
+            </div>
+        
+            <div class="frame">
+                <iframe src='/kpi5/mar/' frameborder="0" width=350rem height=325rem id="my-iframe" scrolling="no" ></iframe> 
+                <h4 class="text-center">March 2018</h4>
+            </div>
+        </div>
+        
+        <div class="embed-responsive embed-responsive-21by9" style="margin-top: 10rem" role="main">
+            <iframe src="/kpi5" frameborder="0" width=700rem height=400rem id="my-iframe" scrolling="no"></iframe>
+        </div> 
+
 {% endblock %}
 

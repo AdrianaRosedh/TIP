@@ -1,10 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}Availability{% endblock %}
+{% block title %}Monthly Availability{% endblock %}
 
 {% block content %}
-<div class="embed-responsive embed-responsive-16by9" role="main">
-    <iframe src="/kpi6" frameborder="0" width=700rem height=600rem id="my-iframe" ></iframe>
-</div> 
+
+<style>     
+    .frame{
+        display:inline-block;
+        overflow-x:hidden;
+
+    }
+</style>
+<div class="d-flex align-items-center justify-content-center" role="main">
+    <div class="frame">
+        <iframe src='/kpi6/a/' frameborder="0" width=350rem height=350rem id="my-iframe" scrolling="no"></iframe> 
+        <h4 class="text-center">January 2018</h4>
+    </div>
+    <div class="frame">
+        <iframe src='/kpi6/b/' frameborder="0" width=350rem height=350rem id="my-iframe" scrolling="no"></iframe> 
+        <h4 class="text-center">February 2018</h4>
+    </div>
+
+    <div class="frame">
+        <iframe src='/kpi6/c/' frameborder="0" width=350rem height=350rem id="my-iframe" scrolling="no"></iframe> 
+        <h4 class="text-center">March 2018</h4>
+    </div>
+</div>
+
 {% endblock %}
 

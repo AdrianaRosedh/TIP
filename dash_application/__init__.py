@@ -16,64 +16,57 @@ KPI1 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapp
 r = requests.get(KPI1)
 KPI1JSON = r.json()["items"]
 
-#SIMPLE VERSION 
-
-k1_months = []
-k1_incidences_numbers = []
-k1_priorities = []
+#KPI 1
+kpi1_months = []
+kpi1_incidences_numbers = []
+kpi1_priorities = []
 
 for dict in KPI1JSON:
-    k1_months.append(dict["month"])
-    k1_incidences_numbers.append(dict["incidences_number"])
-    k1_priorities.append(dict["priority"])
+    if dict['month'] == '201801':
+        dict['month'] = 'Jan 2018'
+        kpi1_months.append(dict["month"])
+        kpi1_incidences_numbers.append(dict["incidences_number"])
+        kpi1_priorities.append(dict["priority"])
+for dict in KPI1JSON:
+    if dict['month'] == '201802':
+        dict['month'] = 'Feb 2018'
+        kpi1_months.append(dict["month"])
+        kpi1_incidences_numbers.append(dict["incidences_number"])
+        kpi1_priorities.append(dict["priority"])
 
-k1_df = pd.DataFrame({
-    "Months": k1_months,
-    "Number of incidents": k1_incidences_numbers,
-    "Priority": k1_priorities
+for dict in KPI1JSON:
+    if dict['month'] == '201803':
+        dict['month'] = 'Mar 2018'
+        kpi1_months.append(dict["month"])
+        kpi1_incidences_numbers.append(dict["incidences_number"])
+        kpi1_priorities.append(dict["priority"])
+
+kpi1_df = pd.DataFrame({
+    "Months": kpi1_months,
+    "Number of incidents": kpi1_incidences_numbers,
+    "Priority": kpi1_priorities
 })
 
 def create_kpi1(flask_app):
-    dash_app = dash.Dash(server=flask_app, name="incidences", url_base_pathname='/kpi1/', external_stylesheets=external_stylesheets)       
-    dash_app.layout = html.Div(children=[
-        #KPI1
-        dcc.Dropdown(
-            id="month",
-            options=[{"label": 'January 2018', "value":'201801'},
-                    {"label": 'February 2018', "value":'201802'},
-                    {"label": 'March 2018', "value":'201803'},
-                    ],
-            value="201801"
-        ),
-        dcc.Graph(
-            id='kpi1',
-            figure= px.bar(k1_df, x="Months", y="Number of incidents", color="Priority", barmode="group")
-        )
-    ])
-
-    @dash_app.callback(
-        Output(component_id="kpi1",component_property="figure"),
-        [Input(component_id="month", component_property="value")]
-    )
-    def update_KPI1(value):
-        return {
-            "data": [
-            {'x': ["Baja", "Media", "Alta", "Critica"], 'y': k1_month[value], 'type': 'bar', 'name': value},
-            ],
-            "layout": {
-                "title": "Incidences per month"
-            }
-        }
+    dash_app = dash.Dash(server=flask_app, name="kpi1", url_base_pathname='/kpi1/')
     
+    dash_app.layout = html.Div(
+        dcc.Graph(
+            id='kpi1-graph',
+            figure= px.bar(kpi1_df, x="Months", y="Number of incidents", color="Priority", barmode="group"),
+        ),  
+        
+    )
     for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
-  
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+                )    
     return dash_app
 
 
 #GET KPI2
-KPI2 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi1/incvol/"
+KPI2 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi2/incsolved/"
 r2 = requests.get(KPI2)
 KPI2JSON = r2.json()["items"]
 
@@ -102,7 +95,7 @@ kpi2_df = pd.DataFrame({
 })
 
 def create_kpi2(flask_app):
-    dash_app = dash.Dash(server=flask_app, name="kpi2", url_base_pathname='/kpi2/', external_stylesheets=external_stylesheets)
+    dash_app = dash.Dash(server=flask_app, name="kpi2", url_base_pathname='/kpi2/')
     
     dash_app.layout = html.Div(
         dcc.Graph(
@@ -113,7 +106,8 @@ def create_kpi2(flask_app):
 
     for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function]
+            )
 
     return dash_app
 
@@ -132,7 +126,7 @@ for i in KPI3JSON:
         sla[i['month']]= [i["brbaja"],i['mtbaja'],i['brmedia'],i['mtmedia'],i['bralta'],i['mtalta'],i['brcritica'],i['mtcritica']]
 
 def create_kpi3(flask_app):
-    dash_app = dash.Dash(server=flask_app, name="SLA", url_base_pathname='/kpi3/', external_stylesheets=external_stylesheets)    
+    dash_app = dash.Dash(server=flask_app, name="SLA", url_base_pathname='/kpi3/')    
     
     dash_app.layout = html.Div(children=[
         #KPI3
@@ -164,7 +158,8 @@ def create_kpi3(flask_app):
         }
         for view_function in dash_app.server.view_functions:
             if view_function.startswith(dash_app.config.url_base_pathname):
-                dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+                dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function]
+                )
 
         return dash_app
 
@@ -197,7 +192,7 @@ k4_df = pd.DataFrame({
 })
 
 def create_kpi4(flask_app):
-    dash_app = dash.Dash(server=flask_app, name="kpi4", url_base_pathname='/kpi4/', external_stylesheets=external_stylesheets)
+    dash_app = dash.Dash(server=flask_app, name="kpi4", url_base_pathname='/kpi4/')
         
     dash_app.layout = html.Div(
         dcc.Graph(
@@ -208,7 +203,8 @@ def create_kpi4(flask_app):
     )
     for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function]
+            )
 
     return dash_app
 
@@ -217,7 +213,44 @@ KPI5 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapp
 r5 = requests.get(KPI5)
 KPI5JSON = r5.json()["items"]
 
-#SIMPLE VERSION 
+k5_months = []
+k5_unavailability_time = []
+k5_availability_percentage = []
+k5_service = []
+
+for dict in KPI5JSON:
+    k5_months.append(dict["month"])
+    k5_unavailability_time.append(dict["unavailability_time"])
+    k5_availability_percentage.append(dict["availability_percentage"])
+    k5_service.append(dict["service"])    
+
+k5_df = pd.DataFrame({  
+    "Months": k5_months,
+    "Hours of Unavailability": k5_unavailability_time,
+    "Percentage of Availability": k5_availability_percentage,
+    "Service": k5_service,
+})
+
+#PIE CHART
+
+def create_kpi5a(flask_app):
+    dash_app = dash.Dash(server=flask_app, name="kpi5", url_base_pathname='/kpi5/')
+    
+    dash_app.layout = html.Div(
+        dcc.Graph(
+            id='kpi5-graph',
+            figure= px.bar(k5_df, x="Months", y="Hours of Unavailability", color="Service", barmode="group")
+        ),  
+        
+    )
+    
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function]
+            )
+
+    return dash_app
+
 
 k5_months = []
 k5_unavailability_time = []
@@ -229,106 +262,195 @@ for dict in KPI5JSON:
     k5_unavailability_time.append(dict["unavailability_time"])
     k5_availability_percentage.append(dict["availability_percentage"])
     k5_service.append(dict["service"])
+   
+k5_unavailability_per_jan = []
+k5_service_jan = []
 
-k5_df = pd.DataFrame({
-    "Months": k5_months,
-    "Number of Unavailability": k5_unavailability_time,
-    "Percentage of Availability": k5_availability_percentage,
-    "Service": k5_service,
-})
+k5_unavailability_per_feb = []
+k5_service_feb = []
 
-def create_kpi5(flask_app):
-    dash_app = dash.Dash(server=flask_app, name="kpi5", url_base_pathname='/kpi5/', external_stylesheets=external_stylesheets)
-    
+k5_unavailability_per_mar = []
+k5_service_mar = []
+
+for dict in KPI5JSON:
+    if dict["month"] == '201801':
+        k5_unavailability_per_jan.append(dict["unavailability_time"])
+        k5_service_jan.append(dict["service"])
+    elif dict["month"] == '201802':
+        k5_unavailability_per_feb.append(dict["unavailability_time"])
+        k5_service_feb.append(dict["service"])
+    elif dict["month"] == '201803':
+        k5_unavailability_per_mar.append(dict["unavailability_time"])
+        k5_service_mar.append(dict["service"])
+                
+k5_dfjan = pd.DataFrame({
+    "Unavailability": k5_unavailability_per_jan,
+    "Service": k5_service_jan    
+    })         
+
+k5_dffeb = pd.DataFrame({
+    "Unavailability": k5_unavailability_per_feb,
+    "Service": k5_service_feb    
+    })
+
+k5_dfmar = pd.DataFrame({
+    "Unavailability": k5_unavailability_per_mar,
+    "Service": k5_service_mar    
+    })      
+
+
+def create_kpi5bjan(flask_app):
+    dash_app = dash.Dash(server=flask_app, name="kpi5jan", url_base_pathname='/kpi5/jan/')
+
     dash_app.layout = html.Div(
-        dcc.Graph(
-            id='kpi5-graph',
-            figure= px.bar(k5_df, x="Months", y="Number of Unavailability", color="Service", hover_name="Percentage of Availability", barmode="group")
-        ),  
-        
-    )
+    dcc.Graph(
+        id='kpi5-pie_grapha',
+        figure= px.pie(k5_dfjan, values='Unavailability', hover_data=['Service'], color_discrete_sequence=px.colors.sequential.Plotly3)))
+
     for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
-
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function])    
     return dash_app
 
-# #Hard KPI5
+def create_kpi5bfeb(flask_app):
+    dash_app = dash.Dash(server=flask_app, name="kpi5feb", url_base_pathname='/kpi5/feb/')
 
-# availability= {}
-# for i in KPI5JSON:
-#     if i['month'] in availability:
-#         availability[i['month']].append(i['unavailability_time'],i['availability_percentage'],i['service'])
-#     else: 
-#         availability[i['month']]= [i['unavailability_time'],i['availability_percentage'],i['service']]
+    dash_app.layout = html.Div(
+    dcc.Graph(
+        id='kpi5-pie_graphb',
+        figure= px.pie(k5_dffeb, values='Unavailability', hover_data=['Service'], color_discrete_sequence=px.colors.sequential.RdBu)))
 
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function])    
+    return dash_app
 
-# def create_kpi5h(flask_app):
-#     dash_app = dash.Dash(server=flask_app, name="kpi5", url_base_pathname='/kpi5h/', external_stylesheets=external_stylesheets)
-    
-#     dash_app.layout = html.Div(children=[
-#         #KPI5
-#         dcc.Dropdown(
-#             id="month",
-#             options=[{"label": 'January 2018', "value":'201801'},
-#                     {"label": 'February 2018', "value":'201802'},
-#                     {"label": 'March 2018', "value":'201803'}
-#                     ],
-#             value="201801"
-#         ),
-#         dcc.Graph(
-#             id='kpi3',
-#             figure={
-#                 'data':[],           
-#             }
-#         )  
-#     ])
+def create_kpi5bmar(flask_app):
+    dash_app = dash.Dash(server=flask_app, name="kpi5mar", url_base_pathname='/kpi5/mar/')
 
-#     @dash_app.callback(
-#         Output(component_id="kpi5",component_property="figure"),
-#         [Input(component_id="month", component_property="value")]
-#     )
-#     def update_KPI5(value):
-#         return {
-#             "data": [
-#             {'x': ['availability_percentage'], 'y': availability[value], 'type': 'bar', 'name': value},            
-#             ]
-#         }
-#         # for view_function in dash_app.server.view_functions:
-#         #     if view_function.startswith(dash_app.config.url_base_pathname):
-#         #         dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+    dash_app.layout = html.Div(
+    dcc.Graph(
+        id='kpi5-pie_graphc',
+        figure= px.pie(k5_dfmar, values='Unavailability', hover_data=['Service'], color_discrete_sequence=px.colors.sequential.Aggrnyl)))
 
-#         return dash_app
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function])    
+    return dash_app
 
 #GET KPI6
+
 KPI6 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi6/monav/"
 r6 = requests.get(KPI6)
 KPI6JSON = r6.json()["items"]
 
-k6_month = []
-k6_monthly_av = []
- 
+#KPI6-a
+kpi6_months = []
+kpi6_av = []
+kpi6_unav = []
+
+
 for dict in KPI6JSON:
-    k6_month.append(dict["month"])
-    k6_monthly_av.append(dict["monthly_av"])
-    
-k6_df = pd.DataFrame({
-    "Months": k6_month,
-    "Average": k6_monthly_av
+    if dict['month'] == '201801':
+        dict['month av'] = 'January 2018 av'
+        dict['month unav'] = 'January 2018 unav'
+        kpi6_months.append(dict["month av"])
+        kpi6_months.append(dict["month unav"])
+        kpi6_av.append(dict["monthly_av"])
+        kpi6_av.append(1 - dict["monthly_av"])
+
+k6_dfa = pd.DataFrame({
+    "Month": kpi6_months,
+    "Availability": kpi6_av
     })
         
-def create_kpi6(flask_app):
-    dash_app = dash.Dash(server=flask_app, name="kpi6", url_base_pathname='/kpi6/', external_stylesheets=external_stylesheets)
+def create_kpi6a(flask_app):
+      dash_app = dash.Dash(server=flask_app, name="kpi6", url_base_pathname='/kpi6/a/')
       
-    dash_app.layout = html.Div(
+      dash_app.layout = html.Div(
         dcc.Graph(
             id='kpi6-graph',
-            figure= px.bar(k6_df, x="Months", y="Average", barmode="group")
-            ),
-        )
+            figure= px.pie(k6_dfa, values='Availability', color_discrete_sequence=px.colors.sequential.Plotly3)
+        ),  
 
-    for view_function in dash_app.server.view_functions:
+    )
+      for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function])    
+      return dash_app
 
-    return dash_app
+#KPI6-b
+kpi6_months = []
+kpi6_av = []
+kpi6_unav = []
+
+for dict in KPI6JSON:
+    if dict['month'] == '201802':
+        dict['month av'] = 'February 2018 av'
+        dict['month unav'] = 'February 2018 unav'
+        kpi6_months.append(dict["month av"])
+        kpi6_months.append(dict["month unav"])
+        kpi6_av.append(dict["monthly_av"])
+        kpi6_av.append(1 - dict["monthly_av"])
+
+    
+k6_dfb = pd.DataFrame({
+    "Month": kpi6_months,
+    "Availability": kpi6_av
+    })
+        
+def create_kpi6b(flask_app):
+      dash_app = dash.Dash(server=flask_app, name="kpi6", url_base_pathname='/kpi6/b/')
+      
+      dash_app.layout = html.Div(
+        dcc.Graph(
+            id='kpi6-graph',
+            figure= px.pie(k6_dfb, values='Availability', color_discrete_sequence=px.colors.sequential.RdBu)
+        ),  
+
+    )
+      for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function])    
+      return dash_app
+
+#KPI6-c
+kpi6_months = []
+kpi6_av = []
+kpi6_unav = []
+
+for dict in KPI6JSON:
+    if dict['month'] == '201803':
+        dict['month av'] = 'March 2018 av'
+        dict['month unav'] = 'March 2018 unav'
+        kpi6_months.append(dict["month av"])
+        kpi6_months.append(dict["month unav"])
+        kpi6_av.append(dict["monthly_av"])
+        kpi6_av.append(1 - dict["monthly_av"])
+
+    
+k6_dfc = pd.DataFrame({
+    "Month": kpi6_months,
+    "Availability": kpi6_av
+    })
+        
+def create_kpi6c(flask_app):
+      dash_app = dash.Dash(server=flask_app, name="kpi6", url_base_pathname='/kpi6/c/')
+      
+      dash_app.layout = html.Div(
+        dcc.Graph(
+            id='kpi6-graph',
+            figure= px.pie(k6_dfc, values='Availability', color_discrete_sequence=px.colors.sequential.Aggrnyl)
+        ),  
+
+    )
+      for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function])    
+      return dash_app

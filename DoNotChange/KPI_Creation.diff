@@ -296,6 +296,7 @@ BEGIN
 END;
 /
 
+
 --- ENDPOINT
 KPI6:
 https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi6/monav/

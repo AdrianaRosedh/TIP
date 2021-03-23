@@ -6,14 +6,16 @@
 <div class="container center" style="margin-top: 5rem">
 
     {% if current_user.is_authenticated %}
-    <h1>you are logged in {{current_user.email}}</h1>
-    {% endif %} 
     <div class="intro text-center">
         <h1>Welcome to Iberia's IT Control Page! </h1>
         <h2>Take a look at our data!</h2>
         <p class="lead">We share to enlight </p> 
         <p class="lead"> No such thing as too much data </p> 
         <p class="lead"> come join the.</p>
+    </div>
+    {% endif %} 
+    <div class="intro text-center">
+        <h1>Please sign in!</h1>
     </div>
 </div>
 
